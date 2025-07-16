@@ -21,48 +21,65 @@ stock =    {   '8475HD'  : [387990,10],
             }
 
 
-def stock_marca(marca):
-  while True:
-    mca=input("ingrese nombre de la marca")
-    if mca.isalpha():
-       break
-    else:
-       print("ingrese solo letras")
-       for clave, valor in productos:
-          
-          print()
+def stock_marca():
+    while True:
+        mca = input("Ingrese nombre de la marca: ").capitalize()
+        if mca.isalpha():
+            break
+        else:
+            print("Ingrese solo letras.")
     
+    print(f"Productos de la marca {mca}:")
+    print("Código\t\tStock\t\tPrecio")
+    print("========================================")
+    encontrado = False
+    for clave, valor in productos.items():
+        if valor[0] == mca:
+            if clave in stock:
+                print(f"{clave}\t\t{stock[clave][1]}\t\t${stock[clave][0]}")
+                encontrado = True
+    if not encontrado:
+        print("No se encontraron productos de esa marca.")
 
 def listadeproducto():
-  print("--------Lista de Notebooks Ordenados--------")
-  for clave, valor in productos.items():
-    print(f"{valor[0]},{clave},{valor[2]},{valor[4]}")
+    print("-------- Lista de Notebooks Ordenados --------")
+    print("Marca\t\tCódigo\t\tRAM\t\tDisco")
+    print("==============================================")
+    for clave, valor in sorted(productos.items(), key=lambda x: x[1][0]):
+        print(f"{valor[0]}\t\t{clave}\t\t{valor[2]}\t\t{valor[4]}")
 
 
 
 def buscar_precio():
-  while True:
-    try:
-      precio_min=int(input("ingrese el precio minimo: "))
-      if precio_min:
-        break
-    except ValueError:
-      print("debe ingresar valores entero!!")
-
-      while True:
+    while True:
         try:
-          precio_max=float(input("ingrese el precio maximo: "))
-          if precio_max > precio_min:
-             break
-          print("debe ingresar un valor mayor al precio minimo")
+            precio_min = int(input("Ingrese el precio mínimo: "))
+            break
         except ValueError:
-           print("debe ingresar valores enteros!!")
-        for clave, valor in stock.items():
-           if valor[0]>= precio_min and valor[0]<=precio_max:
-              if valor[1]>0:
-                 break
-              for clave, valor in productos.items():
-                    print()
+            print("Debe ingresar un número entero válido.")
+    
+    while True:
+        try:
+            precio_max = int(input("Ingrese el precio máximo: "))
+            if precio_max > precio_min:
+                break
+            else:
+                print("El precio máximo debe ser mayor que el mínimo.")
+        except ValueError:
+            print("Debe ingresar un número entero válido.")
+
+    print("\nProductos en ese rango de precios:")
+    print("Código\t\tPrecio\t\tStock")
+    print("========================================")
+    encontrado = False
+    for clave, datos in stock.items():
+        precio, cantidad = datos
+        if precio_min <= precio <= precio_max and cantidad > 0:
+            print(f"{clave}\t\t${precio}\t\t{cantidad}")
+            encontrado = True
+    if not encontrado:
+        print("No se encontraron productos en ese rango.")
+
                    
 
                    
